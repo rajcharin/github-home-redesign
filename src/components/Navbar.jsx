@@ -9,7 +9,7 @@ function GithubLogo({ className = "w-6 h-6 text-white" }) {
   );
 }
 
-export default function Navbar({ onOpenCommandPalette }) {
+export default function Navbar({ onOpenCommandPalette, activeView = 'landing', setActiveView }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -32,7 +32,7 @@ export default function Navbar({ onOpenCommandPalette }) {
         
         {/* Left: Brand Logo & Links */}
         <div className="flex items-center gap-8">
-          <a href="#" className="flex items-center gap-2 group text-white font-bold text-xl tracking-tight">
+          <a href="#" onClick={() => setActiveView?.('landing')} className="flex items-center gap-2 group text-white font-bold text-xl tracking-tight">
             <div className="relative flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-tr from-purple-600 via-blue-600 to-teal-400 p-[1px] shadow-lg shadow-purple-500/20 group-hover:shadow-purple-500/40 transition-all">
               <div className="w-full h-full bg-[#0d1117] rounded-full flex items-center justify-center">
                 <GithubLogo className="w-6 h-6 text-white group-hover:rotate-12 transition-transform duration-300" />
@@ -44,72 +44,49 @@ export default function Navbar({ onOpenCommandPalette }) {
             </span>
           </a>
 
-          {/* Desktop Nav Items */}
-          <nav className="hidden lg:flex items-center gap-1 text-sm font-medium text-gray-300">
-            {/* Products Dropdown */}
-            <div 
-              className="relative"
-              onMouseEnter={() => setActiveDropdown('products')}
-              onMouseLeave={() => setActiveDropdown(null)}
+          {/* View Switcher Tabs */}
+          <div className="hidden sm:flex items-center p-1 rounded-2xl bg-white/5 border border-white/10 text-xs font-semibold">
+            <button
+              onClick={() => setActiveView?.('landing')}
+              className={`px-3.5 py-1.5 rounded-xl transition-all ${
+                activeView === 'landing' 
+                  ? 'bg-purple-600 text-white shadow-md shadow-purple-500/20 font-bold' 
+                  : 'text-gray-400 hover:text-gray-200'
+              }`}
             >
-              <button className="flex items-center gap-1 px-3 py-2 rounded-lg hover:text-white hover:bg-white/5 transition-colors">
-                Products <ChevronDown className="w-4 h-4 text-gray-400" />
-              </button>
+              🌐 Landing Home
+            </button>
+            <button
+              onClick={() => setActiveView?.('dashboard')}
+              className={`px-3.5 py-1.5 rounded-xl transition-all flex items-center gap-1.5 ${
+                activeView === 'dashboard' 
+                  ? 'bg-purple-600 text-white shadow-md shadow-purple-500/20 font-bold' 
+                  : 'text-gray-400 hover:text-gray-200'
+              }`}
+            >
+              ⚡ Dev Dashboard
+            </button>
+          </div>
 
-              {activeDropdown === 'products' && (
-                <div className="absolute top-full left-0 mt-1 w-80 p-3 glass-panel bg-[#0d1117]/95 border-white/10 shadow-2xl rounded-2xl animate-in fade-in slide-in-from-top-2 duration-200">
-                  <div className="grid gap-2">
-                    <a href="#copilot" className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-white/5 transition-colors">
-                      <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20">
-                        <Sparkles className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <div className="font-semibold text-white text-sm">Copilot & AI Swarms</div>
-                        <div className="text-xs text-gray-400">Autonomous multi-agent workspace</div>
-                      </div>
-                    </a>
-
-                    <a href="#actions" className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-white/5 transition-colors">
-                      <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                        <GitBranch className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <div className="font-semibold text-white text-sm">Actions & DAG Workflows</div>
-                        <div className="text-xs text-gray-400">Visual CI/CD pipeline automation</div>
-                      </div>
-                    </a>
-
-                    <a href="#security" className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-white/5 transition-colors">
-                      <div className="p-2 rounded-lg bg-teal-500/10 text-teal-400 border border-teal-500/20">
-                        <Shield className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <div className="font-semibold text-white text-sm">Advanced Security Radar</div>
-                        <div className="text-xs text-gray-400">Real-time vulnerability & secret protection</div>
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <a href="#copilot" className="px-3 py-2 rounded-lg hover:text-white hover:bg-white/5 transition-colors">Solutions</a>
-            <a href="#metrics" className="px-3 py-2 rounded-lg hover:text-white hover:bg-white/5 transition-colors">Open Source</a>
-            <a href="#pricing" className="px-3 py-2 rounded-lg hover:text-white hover:bg-white/5 transition-colors">Pricing</a>
+          {/* Desktop Nav Items */}
+          <nav className="hidden xl:flex items-center gap-1 text-sm font-medium text-gray-300">
+            <a href="#copilot" onClick={() => setActiveView?.('landing')} className="px-3 py-2 rounded-lg hover:text-white hover:bg-white/5 transition-colors">Copilot Swarms</a>
+            <a href="#actions" onClick={() => setActiveView?.('landing')} className="px-3 py-2 rounded-lg hover:text-white hover:bg-white/5 transition-colors">Actions DAG</a>
+            <a href="#security" onClick={() => setActiveView?.('landing')} className="px-3 py-2 rounded-lg hover:text-white hover:bg-white/5 transition-colors">Security Radar</a>
+            <a href="#pricing" onClick={() => setActiveView?.('landing')} className="px-3 py-2 rounded-lg hover:text-white hover:bg-white/5 transition-colors">Pricing</a>
             <a 
               href="https://github.com/rajcharin/rajcharin" 
               target="_blank" 
               rel="noreferrer"
               className="px-3 py-1.5 rounded-xl bg-purple-600/20 text-purple-300 border border-purple-500/30 hover:bg-purple-600/30 transition-all font-mono text-xs flex items-center gap-1.5"
             >
-              <span>🐺 rajcharin/rajcharin</span>
+              <span>🐺 rajcharin</span>
             </a>
           </nav>
         </div>
 
         {/* Right: Search / Palette & Actions */}
         <div className="hidden sm:flex items-center gap-3">
-          {/* Quick Command Trigger */}
           <button 
             onClick={onOpenCommandPalette}
             className="flex items-center gap-3 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 hover:border-white/20 text-gray-400 hover:text-gray-200 text-xs transition-all shadow-inner group"
@@ -121,15 +98,15 @@ export default function Navbar({ onOpenCommandPalette }) {
             </kbd>
           </button>
 
-          <a href="#pricing" className="text-sm font-medium text-gray-300 hover:text-white px-3 py-1.5 transition-colors">
-            Sign in
-          </a>
-
-          <a href="#pricing" className="btn-primary text-xs py-2 px-4">
-            <span>Start Free Trial</span>
+          <button 
+            onClick={() => setActiveView?.('dashboard')}
+            className="btn-primary text-xs py-2 px-4"
+          >
+            <span>Open Dashboard</span>
             <ArrowRight className="w-3.5 h-3.5" />
-          </a>
+          </button>
         </div>
+
 
         {/* Mobile Toggle */}
         <button 
